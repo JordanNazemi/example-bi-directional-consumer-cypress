@@ -21,7 +21,7 @@ describe('product page', () => {
     cy.get('.product-id').contains('09')
     cy.get('.product-name').contains('Gem Visa')
     cy.get('.product-type').contains('CREDIT_CARD')
-    cy.get('.product-price').contains('99.99')
+    cy.get('.product-price').contains(99.99)
   })
 
   after(() => {
