@@ -9,11 +9,11 @@ PACTICIPANT := "pactflow-example-bi-directional-consumer-cypress"
 GITHUB_WEBHOOK_UUID := "04510dc1-7f0a-4ed2-997d-114bfa86f8ad"
 PACT_CHANGED_WEBHOOK_UUID := "8e49caaa-0498-4cc1-9368-325de0812c8a"
 PACT_CLI="docker run --rm -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN pactfoundation/pact-cli"
-GIT_COMMIT:="$(shell git rev-parse HEAD)"
-GIT_BRANCH:="$(shell git rev-parse --abbrev-ref HEAD)"
+GIT_COMMIT:=$(shell git rev-parse HEAD)
+GIT_BRANCH:=$(shell git rev-parse --abbrev-ref HEAD)
 
 # Only deploy from main
-ifeq ($(GIT_BRANCH),"master")
+ifeq ($(GIT_BRANCH),master)
 	DEPLOY_TARGET=deploy
 else
 	DEPLOY_TARGET=no_deploy
