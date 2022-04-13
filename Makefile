@@ -38,7 +38,7 @@ fake_ci: .env
 publish_pacts: .env
 	@echo "\n========== STAGE: publish cypress pacts ==========\n"
 	@echo "${GIT COMMIT}"
-	@"${PACT_CLI}" publish ${PWD}/cypress/pacts --consumer-app-version ${GIT_COMMIT} --tag ${GIT_BRANCH}
+	@"${PACT_CLI}" publish ${PWD}/cypress/pacts --consumer-app-version ${GIT_COMMIT} --branch ${GIT_BRANCH}
 
 ## =====================
 ## Build/test tasks
@@ -75,6 +75,9 @@ deploy_app:
 
 record_deployment: .env
 	@"${PACT_CLI}" broker record-deployment --pacticipant ${PACTICIPANT} --version ${GIT_COMMIT} --environment production
+
+record_dev_deploymeny: .env
+	@"${PACT_CLI}" broker record-deployment --pacticipant ${PACTICIPANT} --version ${GIT_COMMIT} --environment development
 
 ## =====================
 ## Pactflow set up tasks
