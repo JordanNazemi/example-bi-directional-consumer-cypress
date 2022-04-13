@@ -13,8 +13,12 @@ GIT_COMMIT:=$(shell git rev-parse HEAD)
 GIT_BRANCH:=$(shell git rev-parse --abbrev-ref HEAD)
 
 # Only deploy from main
-ifeq ($(GIT_BRANCH),master)
+ifeq ($(GIT_BRANCH), master)
 	DEPLOY_TARGET=deploy
+	DEPLOY_ENV=production
+else ifeq ($(GIT_BRANCH), dev)
+	DEPLOY_TARGET=deploy
+	DEPLOY_ENV=development
 else
 	DEPLOY_TARGET=no_deploy
 endif
@@ -51,10 +55,6 @@ test: .env
 ## =====================
 ## Deploy tasks
 ## =====================
-
-create_environment:
-	@"${PACT_CLI}" broker create-environment --name production --production
-
 deploy: deploy_app record_deployment
 
 no_deploy:
@@ -65,7 +65,7 @@ can_i_deploy: .env
 	@"${PACT_CLI}" broker can-i-deploy \
 	  --pacticipant ${PACTICIPANT} \
 	  --version ${GIT_COMMIT} \
-	  --to-environment development \
+	  --to-environment ${DEPLOY_ENV} \
 	  --retry-while-unknown 0 \
 	  --retry-interval 10
 
@@ -74,7 +74,7 @@ deploy_app:
 	@echo "Deploying to production"
 
 record_deployment: .env
-	@"${PACT_CLI}" broker record-deployment --pacticipant ${PACTICIPANT} --version ${GIT_COMMIT} --environment development
+	@"${PACT_CLI}" broker record-deployment --pacticipant ${PACTICIPANT} --version ${GIT_COMMIT} --environment ${DEPLOY_ENV}
 
 
 ## =====================
