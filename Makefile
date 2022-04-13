@@ -12,7 +12,6 @@ PACT_CLI="docker run --rm -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKE
 GIT_COMMIT:=$(shell git rev-parse HEAD)
 GIT_BRANCH:=$(shell git rev-parse --abbrev-ref HEAD)
 
-# Only deploy from main
 ifeq ($(GIT_BRANCH), master)
 	DEPLOY_TARGET=deploy
 	DEPLOY_ENV=production
@@ -43,6 +42,8 @@ publish_pacts: .env
 	@echo "\n========== STAGE: publish cypress pacts ==========\n"
 	@echo "${GIT COMMIT}"
 	@"${PACT_CLI}" publish ${PWD}/cypress/pacts --consumer-app-version ${GIT_COMMIT} --branch ${GIT_BRANCH}
+
+deploy_target: can_i_deploy $(DEPLOY_TARGET)
 
 ## =====================
 ## Build/test tasks
