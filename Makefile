@@ -43,7 +43,7 @@ publish_pacts: .env
 	@echo "${GIT COMMIT}"
 	@"${PACT_CLI}" publish ${PWD}/cypress/pacts --consumer-app-version ${GIT_COMMIT} --branch ${GIT_BRANCH}
 
-deploy_target: can_i_deploy $(DEPLOY_TARGET)
+deploy_target: $(DEPLOY_TARGET)
 
 ## =====================
 ## Build/test tasks
@@ -59,7 +59,7 @@ test: .env
 deploy: deploy_app record_deployment
 
 no_deploy:
-	@echo "Not deploying as not on main branch"
+	@echo "Not deploying as not on master or dev branch"
 
 can_i_deploy: .env
 	@echo "\n========== STAGE: can-i-deploy? ==========\n"
