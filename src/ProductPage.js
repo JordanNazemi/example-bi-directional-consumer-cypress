@@ -74,10 +74,10 @@ class ProductPage extends React.Component {
         )}
         <View style={[{width:"100%"}]}>
           <div className="delete-product">
-            <Button
+            {/* <Button
               onPress={this.handleClick}
               title="Delete"
-            />
+            /> */}
           </div>
         </View>
       </Layout>

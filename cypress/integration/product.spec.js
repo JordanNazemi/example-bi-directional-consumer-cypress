@@ -37,10 +37,10 @@ describe('product page', () => {
     cy.usePactWait(['getProduct'])
   })
 
-  it('product delete', () => {
-    cy.get('.delete-product').contains("Delete").click()
-    cy.usePactWait(['deleteProductById'])
-  })
+  // it('product delete', () => {
+  //   cy.get('.delete-product').contains("Delete").click()
+  //   cy.usePactWait(['deleteProductById'])
+  // })
 
   // after(() => {
   //   cy.usePactWait(['deleteProductById'])
