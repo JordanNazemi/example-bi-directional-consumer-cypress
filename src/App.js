@@ -14,7 +14,7 @@ const productPropTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    price: PropTypes.string.isRequired
+    price: PropTypes.number.isRequired
   }).isRequired
 }
 
