@@ -1,16 +1,7 @@
-# Why are we using a Makefile? Pactflow has around 30 example consumer and provider projects that show how to use Pact. 
-# We often use them for demos and workshops, and Makefiles allow us to provide a consistent language and platform agnostic interface
-# for each project. You do not need to use Makefiles to use Pact in your own project!
-
-# Default to the read only token - the read/write token will be present on Travis CI.
-# It's set as a secure environment variable in the .travis.yml file
-GITHUB_ORG="pactflow"
 PACTICIPANT := "pactflow-example-bi-directional-consumer-cypress"
-GITHUB_WEBHOOK_UUID := "04510dc1-7f0a-4ed2-997d-114bfa86f8ad"
-PACT_CHANGED_WEBHOOK_UUID := "8e49caaa-0498-4cc1-9368-325de0812c8a"
 PACT_CLI="docker run --rm -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN pactfoundation/pact-cli"
-GIT_COMMIT:=$(shell git rev-parse HEAD)
-GIT_BRANCH:=$(shell git rev-parse --abbrev-ref HEAD)
+GIT_COMMIT:= $(shell git rev-parse HEAD)
+GIT_BRANCH:= $(shell git rev-parse --abbrev-ref HEAD)
 
 ifeq ($(GIT_BRANCH), master)
 	DEPLOY_TARGET=deploy
@@ -19,6 +10,7 @@ else ifeq ($(GIT_BRANCH), dev)
 	DEPLOY_TARGET=deploy
 	DEPLOY_ENV=development
 else
+	DEPLOY_ENV=development
 	DEPLOY_TARGET=no_deploy
 endif
 
@@ -76,39 +68,6 @@ deploy_app:
 
 record_deployment: .env
 	@"${PACT_CLI}" broker record-deployment --pacticipant ${PACTICIPANT} --version ${GIT_COMMIT} --environment ${DEPLOY_ENV}
-
-
-## =====================
-## Pactflow set up tasks
-## =====================
-
-# This should be called once before creating the webhook
-# with the environment variable GITHUB_TOKEN set
-create_github_token_secret:
-	@curl -v -X POST ${PACT_BROKER_BASE_URL}/secrets \
-	-H "Authorization: Bearer ${PACT_BROKER_TOKEN}" \
-	-H "Content-Type: application/json" \
-	-H "Accept: application/hal+json" \
-	-d  "{\"name\":\"githubCommitStatusToken\",\"description\":\"Github token for updating commit statuses\",\"value\":\"${GITHUB_TOKEN}\"}"
-
-# This webhook will update the Github commit status for this commit
-# so that any PRs will get a status that shows what the status of
-# the pact is.
-create_or_update_github_commit_status_webhook:
-	@"${PACT_CLI}" \
-	  broker create-or-update-webhook \
-	  'https://api.github.com/repos/pactflow/example-consumer/statuses/$${pactbroker.consumerVersionNumber}' \
-	  --header 'Content-Type: application/json' 'Accept: application/vnd.github.v3+json' 'Authorization: token $${user.githubCommitStatusToken}' \
-	  --request POST \
-	  --data @${PWD}/pactflow/github-commit-status-webhook.json \
-	  --uuid ${GITHUB_WEBHOOK_UUID} \
-	  --consumer ${PACTICIPANT} \
-	  --contract-published \
-	  --provider-verification-published \
-	  --description "Github commit status webhook for ${PACTICIPANT}"
-
-test_github_webhook:
-	@curl -v -X POST ${PACT_BROKER_BASE_URL}/webhooks/${GITHUB_WEBHOOK_UUID}/execute -H "Authorization: Bearer ${PACT_BROKER_TOKEN}"
 
 
 ## ======================
