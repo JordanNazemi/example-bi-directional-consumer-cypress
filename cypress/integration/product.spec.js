@@ -13,17 +13,6 @@ describe('product page', () => {
         headers: { 'access-control-allow-origin': '*' }
       },
     ).as('getProduct')
-    
-    // cy.intercept(
-    //   {
-    //     method: "DELETE",
-    //     url: '**/product/*',
-    //   },
-    //   {
-    //     statusCode: 200,
-    //     headers: { 'access-control-allow-origin': '*' }
-    //   },
-    // ).as('deleteProductById')
 
     cy.setupPact('pactflow-example-bi-directional-consumer-cypress', Cypress.env('PACT_PROVIDER'))
     cy.visit('http://localhost:3000/products/09')
@@ -37,9 +26,4 @@ describe('product page', () => {
 
     cy.usePactWait(['getProduct'])
   })
-
-  // it('product delete', () => {
-  //   cy.get('.delete-product').contains("Delete").click()
-  //   cy.usePactWait(['deleteProductById'])
-  // })
 })

@@ -19,7 +19,6 @@ class ProductPage extends React.Component {
         id: props.match.params.id
       }
     }
-    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -39,11 +38,6 @@ class ProductPage extends React.Component {
           }
         })
       })
-  }
-
-  handleClick() {
-    API.deleteProduct(this.state.product.id)
-    // window.location.href='/'
   }
 
   render() {
@@ -72,14 +66,6 @@ class ProductPage extends React.Component {
         ) : (
           productInfo
         )}
-        <View style={[{width:"100%"}]}>
-          <div className="delete-product">
-            {/* <Button
-              onPress={this.handleClick}
-              title="Delete"
-            /> */}
-          </div>
-        </View>
       </Layout>
     )
   }
