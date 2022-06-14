@@ -19,6 +19,11 @@ class ProductPage extends React.Component {
         id: props.match.params.id
       }
     }
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    API.deleteProduct(this.state.product.id)
   }
 
   componentDidMount() {
@@ -40,9 +45,6 @@ class ProductPage extends React.Component {
       })
   }
 
-  handleClick() {
-    API.deleteProduct(this.state.product.id)
-  }
 
   render() {
     const productInfo = (
