@@ -54,6 +54,15 @@ export class API {
       })
       .then((r) => new Product(r.data))
   }
+
+  async deleteProduct(id) {
+    return axios
+      .delete(this.withPath('/product/' + id), {
+        headers: {
+          Authorization: this.generateAuthToken()
+        }
+      })
+  }
 }
 
 export default new API(process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001')

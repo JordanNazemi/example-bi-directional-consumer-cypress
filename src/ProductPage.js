@@ -40,6 +40,10 @@ class ProductPage extends React.Component {
       })
   }
 
+  handleClick() {
+    API.deleteProduct(this.state.product.id)
+  }
+
   render() {
     const productInfo = (
       <div>
@@ -49,7 +53,7 @@ class ProductPage extends React.Component {
         <p className="product-price">Price: {this.state.product.price}</p>
       </div>
     )
-
+    
     return (
       <Layout>
         <Heading text="Products" href="/" />
@@ -66,10 +70,18 @@ class ProductPage extends React.Component {
         ) : (
           productInfo
         )}
+        <View style={[{width:"100%"}]}>
+          <div className="delete-product">
+            <Button
+              onPress={this.handleClick}
+              title="Delete"
+            />
+          </div>
+        </View>
       </Layout>
     )
   }
-}
+  }
 
 ProductPage.propTypes = {
   match: PropTypes.array.isRequired,
